@@ -1,26 +1,53 @@
+/**
+ * 【このファイルについて】
+ * このファイルは、Webアプリ全体に適用されるグローバルなCSSスタイルを定義しています。
+ * すべてのページで共通して使用されるスタイルをここで設定します。
+ */
+
+/* Tailwind CSS というスタイリングツールを読み込みます */
+/* Tailwind CSS を使うと、HTMLの className 属性で簡単にスタイルを適用できます */
 @import "tailwindcss";
 
+/**
+ * 【CSS変数の定義】
+ * :root は、HTMLの最上位要素（htmlタグ）を指します
+ * ここで定義した変数は、アプリ全体で使用できます
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* 背景色（白） */
+  --foreground: #171717; /* 文字色（濃いグレー） */
 }
 
+/**
+ * 【Tailwind CSS のテーマ設定】
+ * @theme inline は、Tailwind CSS v4 の新しい書き方です
+ * ここで定義した変数は、Tailwind CSS のクラス名として使用できます
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background); /* 背景色の変数を Tailwind に登録 */
+  --color-foreground: var(--foreground); /* 文字色の変数を Tailwind に登録 */
+  --font-sans: var(--font-geist-sans); /* サンセリフフォントを Tailwind に登録 */
+  --font-mono: var(--font-geist-mono); /* モノスペースフォントを Tailwind に登録 */
 }
 
+/**
+ * 【ダークモードの設定】
+ * @media (prefers-color-scheme: dark) は、ユーザーのシステム設定がダークモードの場合に適用されます
+ * ユーザーがダークモードを設定していると、自動的に暗い色に切り替わります
+ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0a; /* ダークモード時の背景色（ほぼ黒） */
+    --foreground: #ededed; /* ダークモード時の文字色（明るいグレー） */
   }
 }
 
+/**
+ * 【body タグのスタイル】
+ * ページ全体の body 要素に適用されるスタイルです
+ */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background); /* 背景色を変数から取得 */
+  color: var(--foreground); /* 文字色を変数から取得 */
+  font-family: Arial, Helvetica, sans-serif; /* フォントファミリーを指定 */
 }

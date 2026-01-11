@@ -38,6 +38,58 @@ export default function Home() {
   const [count, setCount] = useState(0);
 
   /**
+   * 【useEffect（Audio インスタンス管理）について】
+   * 効果音を再生するための Audio インスタンスを作成・管理します
+   * 
+   * 処理内容：
+   * 1. Audio インスタンスを作成し、音声ファイルを読み込む
+   * 2. コンポーネントがアンマウントされる際に、Audio インスタンスをクリーンアップする
+   * 
+   * メモリリークを防ぐため、useEffect のクリーンアップ関数で Audio インスタンスを適切に処理します
+   */
+  useEffect(() => {
+    // Audio インスタンスを作成（public フォルダ直下の音声ファイルを指定）
+    const clickSound = new Audio('/決定ボタンを押す7.mp3');
+    
+    // 音声ファイルの読み込みを開始（事前読み込み）
+    clickSound.load();
+
+    // クリーンアップ関数：コンポーネントがアンマウントされる際に実行される
+    return () => {
+      // 再生を停止し、リソースを解放
+      clickSound.pause();
+      clickSound.src = '';
+    };
+  }, []); // 空の依存配列なので、マウント時のみ実行
+
+  /**
+   * 【playClickSound 関数】
+   * クリック音を再生する関数です
+   * 
+   * 処理内容：
+   * 1. 新しい Audio インスタンスを作成（連打対策：毎回新しいインスタンスを使用）
+   * 2. currentTime を 0 に設定して、最初から再生されるようにする
+   * 3. 音を再生する
+   * 
+   * 連打対策：
+   * → 毎回新しい Audio インスタンスを作成することで、前の再生を待たずに音が重なるようにします
+   * → currentTime = 0 により、毎回最初から音が鳴ります
+   */
+  const playClickSound = () => {
+    // 新しい Audio インスタンスを作成（連打対策）
+    const clickSound = new Audio('/決定ボタンを押す7.mp3');
+    
+    // 再生位置を最初にリセット（連打対策）
+    clickSound.currentTime = 0;
+    
+    // 音を再生（エラーが発生してもアプリが止まらないように catch で処理）
+    clickSound.play().catch((error) => {
+      // 音声の自動再生がブロックされた場合など、エラーを無視
+      console.log('音声再生エラー:', error);
+    });
+  };
+
+  /**
    * 【useEffect について】
    * useEffect は、コンポーネントがマウントされた時や、特定の値が変更された時に処理を実行します
    * 
@@ -83,6 +135,7 @@ export default function Home() {
    * ただし、カウントが0の場合はそれ以上減らない（マイナスにならない）ようにします
    */
   const handleDecrement = () => {
+    playClickSound(); // クリック音を再生
     setCount(Math.max(0, count - 1)); // count の値を 1 減らす（ただし0未満にはならない）
   };
 
@@ -92,6 +145,7 @@ export default function Home() {
    * 現在の count の値に 1 を足して、新しい値を設定します
    */
   const handleIncrement = () => {
+    playClickSound(); // クリック音を再生
     setCount(count + 1); // count の値を 1 増やす
   };
 
@@ -101,6 +155,7 @@ export default function Home() {
    * count の値を 0 にリセットします
    */
   const handleReset = () => {
+    playClickSound(); // クリック音を再生
     setCount(0); // count の値を 0 に戻す
   };
 

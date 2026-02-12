@@ -8,10 +8,15 @@
 import { useState, useEffect } from 'react';
 
 export default function Home() {
-  // 入力値の状態管理
+  // 入力値の状態管理（数値）
   const [workingHours, setWorkingHours] = useState(8);
   const [breakTime, setBreakTime] = useState(60);
   const [targetQuantity, setTargetQuantity] = useState(400);
+
+  // 入力中の表示用文字列
+  const [workingHoursInput, setWorkingHoursInput] = useState('8');
+  const [breakTimeInput, setBreakTimeInput] = useState('60');
+  const [targetQuantityInput, setTargetQuantityInput] = useState('400');
 
   // 計算結果の状態管理
   const [taktTime, setTaktTime] = useState(0);
@@ -24,13 +29,19 @@ export default function Home() {
     const savedTargetQuantity = localStorage.getItem('takt-target-quantity');
 
     if (savedWorkingHours !== null) {
-      setWorkingHours(parseFloat(savedWorkingHours));
+      const value = parseFloat(savedWorkingHours);
+      setWorkingHours(value);
+      setWorkingHoursInput(savedWorkingHours);
     }
     if (savedBreakTime !== null) {
-      setBreakTime(parseFloat(savedBreakTime));
+      const value = parseFloat(savedBreakTime);
+      setBreakTime(value);
+      setBreakTimeInput(savedBreakTime);
     }
     if (savedTargetQuantity !== null) {
-      setTargetQuantity(parseFloat(savedTargetQuantity));
+      const value = parseFloat(savedTargetQuantity);
+      setTargetQuantity(value);
+      setTargetQuantityInput(savedTargetQuantity);
     }
   }, []);
 
@@ -91,15 +102,40 @@ export default function Home() {
               >
                 稼働時間 (時間)
               </label>
-              <input
-                id="working-hours"
-                type="number"
-                min="0"
-                step="0.5"
-                value={workingHours}
-                onChange={(e) => setWorkingHours(parseFloat(e.target.value) || 0)}
-                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-lg text-slate-800 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-blue-400"
-              />
+              <div className="relative">
+                <input
+                  id="working-hours"
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  value={workingHoursInput}
+                  onChange={(e) => setWorkingHoursInput(e.target.value)}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (isNaN(value) || value < 0) {
+                      setWorkingHours(0);
+                      setWorkingHoursInput('0');
+                    } else {
+                      setWorkingHours(value);
+                      setWorkingHoursInput(value.toString());
+                    }
+                  }}
+                  className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 pr-12 text-lg text-slate-800 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-blue-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWorkingHours(0);
+                    setWorkingHoursInput('');
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-600 dark:hover:text-slate-300"
+                  aria-label="クリア"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* 休憩時間 */}
@@ -110,15 +146,40 @@ export default function Home() {
               >
                 休憩時間 (分)
               </label>
-              <input
-                id="break-time"
-                type="number"
-                min="0"
-                step="1"
-                value={breakTime}
-                onChange={(e) => setBreakTime(parseFloat(e.target.value) || 0)}
-                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-lg text-slate-800 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-blue-400"
-              />
+              <div className="relative">
+                <input
+                  id="break-time"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={breakTimeInput}
+                  onChange={(e) => setBreakTimeInput(e.target.value)}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (isNaN(value) || value < 0) {
+                      setBreakTime(0);
+                      setBreakTimeInput('0');
+                    } else {
+                      setBreakTime(value);
+                      setBreakTimeInput(value.toString());
+                    }
+                  }}
+                  className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 pr-12 text-lg text-slate-800 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-blue-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBreakTime(0);
+                    setBreakTimeInput('');
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-600 dark:hover:text-slate-300"
+                  aria-label="クリア"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* 目標生産数 */}
@@ -129,15 +190,40 @@ export default function Home() {
               >
                 目標生産数 (個)
               </label>
-              <input
-                id="target-quantity"
-                type="number"
-                min="0"
-                step="1"
-                value={targetQuantity}
-                onChange={(e) => setTargetQuantity(parseFloat(e.target.value) || 0)}
-                className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 text-lg text-slate-800 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-blue-400"
-              />
+              <div className="relative">
+                <input
+                  id="target-quantity"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={targetQuantityInput}
+                  onChange={(e) => setTargetQuantityInput(e.target.value)}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (isNaN(value) || value < 0) {
+                      setTargetQuantity(0);
+                      setTargetQuantityInput('0');
+                    } else {
+                      setTargetQuantity(value);
+                      setTargetQuantityInput(value.toString());
+                    }
+                  }}
+                  className="w-full rounded-lg border-2 border-slate-300 bg-white px-4 py-3 pr-12 text-lg text-slate-800 transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-blue-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTargetQuantity(0);
+                    setTargetQuantityInput('');
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-600 dark:hover:text-slate-300"
+                  aria-label="クリア"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

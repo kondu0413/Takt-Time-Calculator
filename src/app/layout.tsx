@@ -38,6 +38,9 @@ const geistMono = Geist_Mono({
  * OGP（Open Graph Protocol）設定により、SNSでのシェア時に適切な情報が表示されます
  */
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}` 
+    : 'http://localhost:3000'),
   title: "タクトタイム計算機 - 現場専用",
   description: "生産技術・製造業向けの、入力するだけで瞬時に計算できるタクトタイム計算アプリです。",
   openGraph: {

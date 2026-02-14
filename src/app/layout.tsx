@@ -11,6 +11,17 @@ import { Geist, Geist_Mono } from "next/font/google";
 // グローバルなCSSスタイルを読み込みます
 import "./globals.css";
 
+const rawSiteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+  "http://localhost:3000";
+
+const normalizedSiteUrl =
+  rawSiteUrl.startsWith("http://") || rawSiteUrl.startsWith("https://")
+    ? rawSiteUrl
+    : `https://${rawSiteUrl}`;
+
 /**
  * 【フォントの設定】
  * Geist というフォントを設定しています
@@ -38,6 +49,7 @@ const geistMono = Geist_Mono({
  * OGP（Open Graph Protocol）設定により、SNSでのシェア時に適切な情報が表示されます
  */
 export const metadata: Metadata = {
+  metadataBase: new URL(normalizedSiteUrl),
   title: "タクトタイム計算機 - 現場専用",
   description: "生産技術・製造業向けの、入力するだけで瞬時に計算できるタクトタイム計算アプリです。",
   openGraph: {
@@ -47,7 +59,7 @@ export const metadata: Metadata = {
     locale: "ja_JP",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "タクトタイム計算機",
@@ -58,7 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "タクトタイム計算機 - 現場専用",
     description: "生産技術・製造業向けの、入力するだけで瞬時に計算できるタクトタイム計算アプリです。",
-    images: ["/opengraph-image.png"],
+    images: ["/opengraph-image"],
   },
 };
 

@@ -50,7 +50,7 @@ const geistMono = Geist_Mono({
  */
 export const metadata: Metadata = {
   metadataBase: new URL(normalizedSiteUrl),
-  title: "タクトタイム計算機 - 現場専用",
+  title: "タクトタイム計算機",
   description: "生産技術・製造業向けの、入力するだけで瞬時に計算できるタクトタイム計算アプリです。",
   openGraph: {
     title: "タクトタイム計算機 - 現場専用",
